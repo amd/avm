@@ -2981,8 +2981,11 @@ static void search_tx_type(const AV2_COMP *cpi, MACROBLOCK *x, int plane,
          dry_pass_caps_tx_search(x, cpi));
 
     bool skip_idx = false;
+    // Fast dry pass ranks shapes only; force the (set_idx=0, stx=0) baseline.
     const int max_set_id =
-        get_ist_max_set_id(skip_stx, is_inter, txw, txh, primary_tx_type);
+        dry_pass_caps_tx_search(x, cpi)
+            ? 1
+            : get_ist_max_set_id(skip_stx, is_inter, txw, txh, primary_tx_type);
     assert(max_set_id < IST_SET_SIZE);
     int ist_buf_filled[IST_INPUT_BUF_SLOTS] = { 0 };
 
